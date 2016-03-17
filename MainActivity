@@ -1,0 +1,66 @@
+package com.example.jarednielson.httpurlconnection;
+
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.lang.ref.WeakReference;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+import java.util.logging.Handler;
+
+import javax.net.ssl.HttpsURLConnection;
+
+
+public class MainActivity extends AppCompatActivity {
+
+    private int requestCount = 0;
+
+    Button urlButton;
+    TextView dataText;
+
+
+    @Override
+    protected void onCreate(Bundle savedInstanceState) {
+
+        super.onCreate(savedInstanceState);
+
+        setContentView(R.layout.activity_main);
+
+        urlButton = (Button) findViewById(R.id.urlButton);
+        dataText = (TextView) findViewById(R.id.dataText);
+
+    }
+
+
+
+        public void urlButton(View v) {
+
+            this.requestCount++;
+
+            EditText textInput = (EditText)this.findViewById(R.id.message);
+
+            String theMessage = textInput.getText().toString();
+
+
+            TextView responseView = (TextView)this.findViewById(R.id.dataText);
+
+            WeakReference responseViewReference = new WeakReference(responseView);
+
+            Communication communication = new Communication(this.requestCount,theMessage, responseViewReference);
+
+            Thread CommunicationThread = new Thread(communication);
+
+            CommunicationThread.start();
+        }
+}
